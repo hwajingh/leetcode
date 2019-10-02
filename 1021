@@ -1,0 +1,39 @@
+/* remove outmost parentheses 
+1021. Remove Outermost Parentheses
+A valid parentheses string is either empty (""), "(" + A + ")", or A + B, where A and B are valid parentheses strings, and + represents string concatenation.  For example, "", "()", "(())()", and "(()(()))" are all valid parentheses strings.
+
+A valid parentheses string S is primitive if it is nonempty, and there does not exist a way to split it into S = A+B, with A and B nonempty valid parentheses strings.
+
+Given a valid parentheses string S, consider its primitive decomposition: S = P_1 + P_2 + ... + P_k, where P_i are primitive valid parentheses strings.
+
+Return S after removing the outermost parentheses of every primitive string in the primitive decomposition of S.*/
+
+
+
+
+class Solution {
+    public String removeOuterParentheses(String S) {
+        List<Integer> l = new ArrayList<>();
+        Stack<Character> stk = new Stack<>();
+        char[] ar = S.toCharArray();
+        for(int i = 0; i < ar.length; i++){
+            if(stk.size() == 0){
+                l.add(i);
+                stk.push(ar[i]); continue;
+            }
+            if(stk.peek() == '(' && ar[i] == ')'){
+                stk.pop(); if(stk.size() == 0) l.add(i);
+            }else if(stk.peek() == ')' && ar[i] == '('){
+                stk.pop(); if(stk.size() == 0) l.add(i);
+            }else{
+                stk.push(ar[i]);
+            }
+        }        
+        System.out.println(l);
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < l.size() ; i+= 2){
+            sb.append(S.substring(l.get(i)+1, l.get(i+1)));
+        }
+        return sb.toString();
+    }
+}
