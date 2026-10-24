@@ -1,4 +1,4 @@
-/* remove outmost parentheses 
+/* remove outmost parentheses
 1021. Remove Outermost Parentheses
 A valid parentheses string is either empty (""), "(" + A + ")", or A + B, where A and B are valid parentheses strings, and + represents string concatenation.  For example, "", "()", "(())()", and "(()(()))" are all valid parentheses strings.
 
@@ -9,30 +9,27 @@ Given a valid parentheses string S, consider its primitive decomposition: S = P_
 Return S after removing the outermost parentheses of every primitive string in the primitive decomposition of S.*/
 
 
-
-
 class Solution {
     public String removeOuterParentheses(String S) {
-        List<Integer> l = new ArrayList<>();
-        Stack<Character> stk = new Stack<>();
-        char[] ar = S.toCharArray();
-        for(int i = 0; i < ar.length; i++){
-            if(stk.size() == 0){
-                l.add(i);
-                stk.push(ar[i]); continue;
-            }
-            if(stk.peek() == '(' && ar[i] == ')'){
-                stk.pop(); if(stk.size() == 0) l.add(i);
-            }else if(stk.peek() == ')' && ar[i] == '('){
-                stk.pop(); if(stk.size() == 0) l.add(i);
-            }else{
-                stk.push(ar[i]);
-            }
-        }        
-        System.out.println(l);
+        // FIX: single depth counter, O(n) time, O(1) extra space.
+        // The original kept a Stack plus a List of boundaries, then
+        // substring()ed between them, left a debug println in, and had a
+        // dead branch (a ')' is never pushed, so stk.peek() == ')' never
+        // happens on a valid input).
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < l.size() ; i+= 2){
-            sb.append(S.substring(l.get(i)+1, l.get(i+1)));
+        int depth = 0;
+        for (char c : S.toCharArray()) {
+            if (c == '(') {
+                if (depth > 0) {
+                    sb.append(c);
+                }
+                depth++;
+            } else if (c == ')') {
+                depth--;
+                if (depth > 0) {
+                    sb.append(c);
+                }
+            }
         }
         return sb.toString();
     }
