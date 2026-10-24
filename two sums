@@ -5,20 +5,23 @@ Given an array of integers, return indices of the two numbers such that they add
 You may assume that each input would have exactly one solution, and you may not use the same element twice.*/
 
 
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-     
-        for (int i = 0; i < nums.length(); i++)
-        {
-            for (int j=i+1; j<nums.length(); j++)
-            {
-                if (target==nums[i]+nums[j])
-                    return nums{i,j};
+        // FIX: O(n) single pass with a HashMap (value -> index).
+        // The original was O(n^2) and did not compile: nums.length() on an
+        // array, return nums{i,j}, and return [] are all invalid Java,
+        // and it returned values instead of indices.
+        Map<Integer, Integer> seen = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            Integer j = seen.get(target - nums[i]);
+            if (j != null) {
+                return new int[]{j, i};
             }
+            seen.put(nums[i], i);
         }
-        return [];
-        
-        
+        return new int[0];
     }
 }
